@@ -1,0 +1,299 @@
+---
+title: "Seattle Interview Code for Presentation (November 2023)"
+author: "Michael Lewis-Wedderburn"
+date: "2023-11-27"
+output: powerpoint_presentation
+---
+
+```{r}
+
+# Loading necessary libraries
+library(dplyr)
+
+# Visualizing correlations
+library(ggplot2)
+library(tidyverse)
+
+```
+
+```{r}
+
+# Displaying the structure of Pitcher X dataset (Also displays column names)
+
+xdata <- read.csv("Pitcher_X_Data.csv")
+attach(xdata)
+xdata
+
+str(xdata)
+colnames(xdata)
+
+```
+
+```{r}
+
+# Summarizing Pitcher X dataset by observing basic measures
+
+summary(xdata)
+
+```
+
+```{r}
+
+# Creating new dataset to include all pitches where each metric has a value
+
+Newxdata <- xdata[complete.cases(xdata),]
+Newxdata
+
+```
+
+```{r}
+
+# Identifying correlations between every variable
+correlation_matrix <- cor(Newxdata[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Displaying the correlation matrix
+print("Correlation Matrix:")
+print(correlation_matrix)
+
+```
+
+```{r}
+
+# Finding how many pitches are in Pitcher X's repertoire and creating new datasets from them
+
+unique(PitchType)
+xdata1 = Newxdata %>% filter(PitchType == "FASTBALL")
+xdata2 = Newxdata %>% filter(PitchType == "SLIDER")
+xdata3 = Newxdata %>% filter(PitchType == "CUTTER")
+xdata4 = Newxdata %>% filter(PitchType == "CHANGEUP")
+xdata5 = Newxdata %>% filter(PitchType == "CURVEBALL")
+
+```
+
+```{r}
+
+# Identifying correlations for fastballs only
+correlation_matrix1 <- cor(xdata1[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Identifying correlations for cutters only
+correlation_matrix2 <- cor(xdata2[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Identifying correlations for sliders only
+correlation_matrix3 <- cor(xdata3[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Identifying correlations between changeups only
+correlation_matrix4 <- cor(xdata4[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Identifying correlations for curveballs only
+correlation_matrix5 <- cor(xdata5[c("ReleaseSpeed", 
+                          "InducedVertBreak", "HorzBreak", "ReleaseHeight", 
+                          "ReleaseSide", "Extension", "PlateHeight", "PlateSide",
+                          "SpinRate", "SpinAxis", "swing_prob", "whiff_prob_gs", 
+                          "whiff_prob")])
+
+# Displaying the correlation matrices
+print("Correlation Matrix for Fastballs:")
+print(correlation_matrix1)
+
+
+print("Correlation Matrix for Cutters:")
+print(correlation_matrix2)
+
+
+print("Correlation Matrix for Sliders:")
+print(correlation_matrix3)
+
+
+print("Correlation Matrix for Changeups:")
+print(correlation_matrix4)
+
+
+print("Correlation Matrix for Curveballs:")
+print(correlation_matrix5)
+
+```
+
+```{r}
+
+# These were the findings I found for the velocity metrics
+
+# Displaying scatter plot of release speed vs. whiff probability
+ggplot(Newxdata, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# Displaying scatter plot of spin rate vs. whiff probability
+ggplot(Newxdata, aes(x = SpinRate, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Spin Rate (rpm)",
+       y = "Whiff Probability")
+
+# Displaying scatter plot of spin axis vs. whiff probability
+ggplot(Newxdata, aes(x = SpinAxis, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Spin Axis (Degrees)",
+       y = "Whiff Probability")
+
+```
+
+```{r}
+
+# Displaying boxplot of whiff probability for different pitch types
+ggplot(Newxdata, aes(x = PitchType, y = whiff_prob)) +
+  geom_boxplot() +
+  labs(title = "Whiff Probability by Pitch Type",
+       x = "Pitch Type",
+       y = "Whiff Probability")
+
+```
+
+```{r}
+
+# EXTRA IDEA: Displaying graphs for velocities for each pitch type
+
+
+# Displaying scatterplot of velocity vs. whiff probability for fastballs
+ggplot(xdata1, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# Displaying scatterplot of velocity vs. whiff probability for cutters
+ggplot(xdata2, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# Displaying scatterplot of velocity vs. whiff probability for sliders
+ggplot(xdata3, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# Displaying scatterplot of velocity vs. whiff probability for changeups
+ggplot(xdata4, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# Displaying scatterplot of velocity vs. whiff probability for curveballs
+ggplot(xdata5, aes(x = ReleaseSpeed, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Velocity vs. Whiff Probability",
+       x = "Velocity (mph)",
+       y = "Whiff Probability")
+
+# DID NOT PUT IN PRESENTATION
+
+```
+
+```{r}
+
+# These were the findings I found for the movement metrics
+
+# Displaying scatter plot of vertical break vs. whiff probability
+ggplot(Newxdata, aes(x = InducedVertBreak, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Vertical Break vs. Whiff Probability",
+       x = "Vertical Break (in.)",
+       y = "Whiff Probability")
+
+# Displaying scatter plot of horizontal break vs. whiff probability
+ggplot(Newxdata, aes(x = HorzBreak, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Horizontal Break vs. Whiff Probability",
+       x = "Horizontal Break (in.)",
+       y = "Whiff Probability")
+
+```
+
+```{r}
+
+# These were the findings I found for the location metrics
+
+# Displaying scatter plot of plate height vs. whiff probability
+ggplot(Newxdata, aes(x = PlateHeight, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Plate Height vs. Whiff Probability",
+       x = "Plate Height (ft.)",
+       y = "Whiff Probability")
+
+# Displaying scatter plot of plate side vs. whiff probability
+ggplot(Newxdata, aes(x = PlateSide, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Plate Side vs. Whiff Probability",
+       x = "Plate Side (ft.)",
+       y = "Whiff Probability")
+
+```
+
+```{r}
+
+# EXTRA IDEA: Heat map of whiff probabilities by pitch location
+
+plot(PlateHeight ~ PlateSide)
+
+ggplot(Newxdata, aes(x = PlateSide, y = PlateHeight, fill = whiff_prob)) +
+  geom_point() +
+  labs(title = "Whiff Probability by Pitch Location",
+       x = "Horizontal Location",
+       y = "Vertical Location")
+
+ggplot(Newxdata, aes(x = ReleaseHeight, y = ReleaseSpeed)) +
+  geom_tile() +
+  labs(title = "Whiff Probability by Pitch Location",
+       x = "Horizontal Location",
+       y = "Vertical Location",
+       fill = "Whiff Probability")
+
+# DID NOT PUT IN PRESENTATION
+
+```
+
+```{r}
+
+# These were the findings I found for the release point metrics
+
+# Displaying scatter plot of release height vs. whiff probability
+ggplot(Newxdata, aes(x = ReleaseHeight, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Release Height vs. Whiff Probability",
+       x = "Vertical Break (ft.)",
+       y = "Whiff Probability")
+
+# Displaying scatter plot of release side vs. whiff probability
+ggplot(Newxdata, aes(x = ReleaseSide, y = whiff_prob)) +
+  geom_point() +
+  labs(title = "Release Side vs. Whiff Probability",
+       x = "Horizontal Break (ft.)",
+       y = "Whiff Probability")
+
+```

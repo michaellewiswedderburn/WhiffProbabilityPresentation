@@ -1,0 +1,1 @@
+As a sample project with the Seattle Mariners, I made a presentation that evaluates a sample pitcher's performance and I offer some suggestions on how to develop him better by breaking down his trends regarding velocity, location, movement, and release.
